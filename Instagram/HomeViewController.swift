@@ -133,6 +133,9 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
         // セル内のボタンのアクションをソースコードで設定する
         cell.likeButton.addTarget(self, action:#selector(handleButton(sender:event:)), for:  UIControlEvents.touchUpInside)
         
+        //cellないのボタンのアクションをソースコードで設定する
+        cell.commentButton.addTarget(self, action:#selector(commentButton(sender:event:)), for: UIControlEvents.touchUpInside)
+        
         return cell
     }
     
@@ -180,6 +183,33 @@ class HomeViewController: UIViewController, UITableViewDataSource, UITableViewDe
             postRef.updateChildValues(likes)
             
         }
+    }
+    func commentButton(sender: UIButton, event: UIEvent){
+        print("DEBUG_PRINT: commentButtonが押されました")
+        
+        //タップされたインデックスのデータを取り出す
+        let touch = event.allTouches?.first
+        let point = touch!.location(in: self.tableView)
+        let indexPath = tableView.indexPathForRow(at: point)
+        
+        //タップされたセルのインデックスのデータを取り出す
+        let postData = postArray[indexPath!.row]
+        //遷移先に
+      
+        
+        //画面遷移
+        let storyboard: UIStoryboard = self.storyboard!
+        let nextView:ResultViewController = storyboard.instantiateViewController(withIdentifier: "result") as! ResultViewController
+        //遷移先にデータを渡す
+        
+        nextView.comment = postData
+        
+        present(nextView, animated: true, completion: nil)
+        
+       
+        
+        
+        //Firebaseに保存するデータの準備
     }
 
 }
